@@ -55,7 +55,7 @@ class BatchedURDF:
         self._link_to_meshes: dict[str, onp.ndarray] = {}
 
         # Check if add_batched_meshes_trimesh is available.
-        if not hasattr(self._target.scene, "add_batched_meshes_trimesh"):
+        if not hasattr(self._target.scene, "add_batched_meshes_trimesh") and self._num_robots > 1:
             raise NotImplementedError(
                 "num_robots > 1, but viser doesn't support instancing "
                 "(add_batched_meshes_trimesh is not available)."
@@ -158,9 +158,10 @@ class BatchedURDF:
             position = onp.array(T_mesh_world.translation())  # Shape (num_robots, 3)
             wxyz = onp.array(T_mesh_world.rotation().wxyz)  # Shape (num_robots, 4)
             for mesh in meshes:
-                if isinstance(mesh, viser.BatchedGlbHandle):
-                    mesh.batched_positions = position
-                    mesh.batched_wxyzs = wxyz
-                else:
+                if isinstance(mesh, viser.GlbHandle):
                     mesh.position = position[0]
                     mesh.wxyz = wxyz[0]
+                else:
+                    assert isinstance(mesh, viser.BatchedGlbHandle)
+                    mesh.batched_positions = position
+                    mesh.batched_wxyzs = wxyz

@@ -73,8 +73,11 @@ class ManipulabilityEllipse:
             color=self._color,
             wireframe=self._wireframe,
             visible=self._visible,
-            cast_shadow=False,  # Ellipsoids usually don't need shadows
         )
+
+        # Viser version compatibility.
+        if hasattr(self._mesh_handle, "cast_shadow"):
+            self._mesh_handle.cast_shadow = False  # Ellipsoids usually don't need shadows
 
     def set_target_link(self, link_name: Optional[str]):
         """Sets the target link for which to display the ellipsoid.

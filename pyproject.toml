@@ -24,6 +24,9 @@ dependencies = [
     "loguru",
     "robot_descriptions",
     "jaxls @ git+https://github.com/brentyi/jaxls.git",
+    "yourdfpy",
+    "trimesh",
+    "viser",
 ]
 
 [project.optional-dependencies]
@@ -32,9 +35,6 @@ dev = [
     "scikit-sparse",
     "ruff",
     "pytest",
-]
-examples = [
-    "viser>=0.2.0",
 ]
 
 [tool.ruff.lint]
