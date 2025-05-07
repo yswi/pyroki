@@ -1,4 +1,5 @@
-"""06_online_planning.py
+"""Online Planning
+
 Run online planning in collision aware environments.
 """
 

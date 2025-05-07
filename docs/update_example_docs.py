@@ -34,12 +34,17 @@ class ExampleMetadata:
 
         title, _, description = docstring.partition("\n")
 
+        description = description.strip()
+        description += "\n"
+        description += "\n"
+        description += "All descriptions can be run by cloning the PyRoki repository, which includes the `pyroki_snippets` implementation details."
+
         return ExampleMetadata(
             index=index,
             index_with_zero=index_with_zero,
             source=source.partition('"""')[2].partition('"""')[2].strip(),
             title=title,
-            description=description.strip(),
+            description=description,
         )
 
 

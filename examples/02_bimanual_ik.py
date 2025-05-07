@@ -1,5 +1,5 @@
-"""
-02_bimanual_ik.py
+"""Bimanual IK
+
 Same as 01_basic_ik.py, but with two end effectors!
 """
 

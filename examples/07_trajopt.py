@@ -1,19 +1,21 @@
-"""07_trajopt.py
+"""Trajectory Optimization
+
 Basic Trajectory Optimization using PyRoKi.
 
 Robot going over a wall, while avoiding world-collisions.
 """
 
 import time
+from typing import Literal
+
+import numpy as np
+import pyroki as pk
+import trimesh
 import tyro
 import viser
-import trimesh
-import numpy as np
-from typing import Literal
+from pyroki.viewer import BatchedURDF
 from robot_descriptions.loaders.yourdfpy import load_robot_description
 
-import pyroki as pk
-from pyroki.viewer import BatchedURDF
 import pyroki_snippets as pks
 
 

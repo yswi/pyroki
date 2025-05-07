@@ -1,4 +1,5 @@
-"""04_ik_with_coll.py
+"""IK with Collision
+
 Basic Inverse Kinematics with Collision Avoidance using PyRoKi.
 """
 

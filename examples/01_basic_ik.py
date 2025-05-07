@@ -1,4 +1,5 @@
-"""01_basic_ik.py
+"""Basic IK
+
 Simplest Inverse Kinematics Example using PyRoki.
 """
 

@@ -1,5 +1,5 @@
-"""
-03_mobile_ik.py
+"""Mobile IK
+
 Same as 01_basic_ik.py, but with a mobile base!
 """
 

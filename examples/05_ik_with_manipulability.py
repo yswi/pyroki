@@ -1,4 +1,5 @@
-"""05_ik_with_manipulability.py
+"""IK with Manipulability
+
 Inverse Kinematics with Manipulability using PyRoKi.
 """
 
