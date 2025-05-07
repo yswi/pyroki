@@ -85,8 +85,8 @@ def solve_ik(
         ),
         # Use direct constructor
         pk.RestCost(
-            (joint_var,), 
-            rest_pose=rest_pose_for_cost, # Use the determined rest pose
+            (joint_var,),
+            rest_pose=rest_pose_for_cost,  # Use the determined rest pose
             weights=jnp.array([rest_weight] * robot.joint.actuated_count),
         ),
     ]
@@ -291,9 +291,9 @@ def run_ik_loop(
         joints = solve_ik(
             robot=robot,
             coll=coll,
-            world_coll=world_coll, # Use updated world_coll
+            world_coll=world_coll,  # Use updated world_coll
             target_pose=target_poses,
-            target_link_indices=target_link_indices, # Pass link indices
+            target_link_indices=target_link_indices,  # Pass link indices
             init_joints=init_joints,
             pos_weight=gui_handles["pos_weight"].value,
             rot_weight=gui_handles["rot_weight"].value,

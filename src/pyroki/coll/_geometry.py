@@ -27,9 +27,9 @@ class CollGeom(abc.ABC):
         """Get batch axes of the geometry."""
         batch_axes_from_pose = self.pose.get_batch_axes()
         size_batch_axes = self.size.shape[:-1]
-        assert (
-            size_batch_axes == batch_axes_from_pose
-        ), f"Size batch axes {size_batch_axes} do not match pose batch axes {batch_axes_from_pose}."
+        assert size_batch_axes == batch_axes_from_pose, (
+            f"Size batch axes {size_batch_axes} do not match pose batch axes {batch_axes_from_pose}."
+        )
         return batch_axes_from_pose
 
     def broadcast_to(self, *shape: int) -> Self:
@@ -104,7 +104,9 @@ class HalfSpace(CollGeom):
         normal = jnp.broadcast_to(normal, batch_axes + (3,))
         mat = make_frame(normal)
         pos = point
-        pose = jaxlie.SE3.from_rotation_and_translation(jaxlie.SO3.from_matrix(mat), pos)
+        pose = jaxlie.SE3.from_rotation_and_translation(
+            jaxlie.SO3.from_matrix(mat), pos
+        )
         size = jnp.zeros(batch_axes + (1,), dtype=pos.dtype)
         return HalfSpace(pose=pose, size=size)
 
@@ -201,7 +203,9 @@ class Capsule(CollGeom):
         radius = jnp.broadcast_to(radius, batch_axes)
         height = jnp.broadcast_to(height, batch_axes)
 
-        pose = jaxlie.SE3.from_rotation_and_translation(jaxlie.SO3.from_matrix(mat), pos)
+        pose = jaxlie.SE3.from_rotation_and_translation(
+            jaxlie.SO3.from_matrix(mat), pos
+        )
 
         # Store radius and half-length, shape_dim=2
         size = jnp.stack([radius, height / 2.0], axis=-1)
@@ -433,9 +437,9 @@ class Heightmap(CollGeom):
             # vmap over flattened batch dimension.
             vmap_interpolate = jax.vmap(
                 lambda h, c: jax.scipy.ndimage.map_coordinates(
-                    h, c[:, None], order=1, mode='nearest'
+                    h, c[:, None], order=1, mode="nearest"
                 ).squeeze(),
-                in_axes=(0, 0)
+                in_axes=(0, 0),
             )
             interpolated_heights_flat = vmap_interpolate(h_data_flat, coords_flat)
             interpolated_heights = interpolated_heights_flat.reshape(target_batch_shape)
@@ -443,8 +447,9 @@ class Heightmap(CollGeom):
             # Non-batched case.
             interpolated_heights = jax.scipy.ndimage.map_coordinates(
                 hm_data_bc,
-                (coords_bc[0:1], coords_bc[1:2]), # ([r_cont], [c_cont])
-                order=1, mode='nearest'
+                (coords_bc[0:1], coords_bc[1:2]),  # ([r_cont], [c_cont])
+                order=1,
+                mode="nearest",
             ).squeeze()
 
         # Scale interpolated height
@@ -468,9 +473,9 @@ class Heightmap(CollGeom):
         if batch_axes:
             x = jnp.broadcast_to(x, batch_axes + (W,))
             y = jnp.broadcast_to(y, batch_axes + (H,))
-            xx, yy = jnp.meshgrid(x, y, indexing='xy') # Results shape (*batch, H, W).
+            xx, yy = jnp.meshgrid(x, y, indexing="xy")  # Results shape (*batch, H, W).
         else:
-            xx, yy = jnp.meshgrid(x, y, indexing='xy') # Results shape (H, W).
+            xx, yy = jnp.meshgrid(x, y, indexing="xy")  # Results shape (H, W).
 
         # Scale height data.
         zz = self.height_data * self.height_scale[..., None, None]
@@ -499,9 +504,7 @@ class Heightmap(CollGeom):
         new_pose = jaxlie.SE3(new_pose_wxyz_xyz)
         shape_dim = self.size.shape[-1]
         new_size = self.size.reshape(shape + (shape_dim,))
-        new_height_data = self.height_data.reshape(
-            shape + self.height_data.shape[-2:]
-        )
+        new_height_data = self.height_data.reshape(shape + self.height_data.shape[-2:])
         return type(self)(pose=new_pose, size=new_size, height_data=new_height_data)
 
     def transform(self, transform: jaxlie.SE3) -> Self:
@@ -560,8 +563,8 @@ class Heightmap(CollGeom):
                 idx3 = (r + 1) * cols + (c + 1)
                 front_faces.append([idx0, idx1, idx2])  # Triangle 1 (front)
                 front_faces.append([idx1, idx3, idx2])  # Triangle 2 (front)
-                back_faces.append([idx0, idx2, idx1])   # Triangle 1 (back)
-                back_faces.append([idx1, idx2, idx3])   # Triangle 2 (back)
+                back_faces.append([idx0, idx2, idx1])  # Triangle 1 (back)
+                back_faces.append([idx1, idx2, idx3])  # Triangle 2 (back)
 
         all_faces = front_faces + back_faces
 
@@ -574,4 +577,3 @@ class Heightmap(CollGeom):
         heightmap_mesh.apply_transform(tf)
 
         return heightmap_mesh
-

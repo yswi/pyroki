@@ -1,5 +1,3 @@
-from typing import Sequence
-
 import jax
 import jax.numpy as jnp
 import jax_dataclasses as jdc

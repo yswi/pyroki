@@ -103,35 +103,37 @@ def run_mpc_step(
         ),
     ]
 
-    factors.extend([
-        pk.SmoothnessCost(
-            cost_inputs=(
-                robot.JointVar(jnp.arange(0, n_steps - 1)),
-                robot.JointVar(jnp.arange(1, n_steps)),
+    factors.extend(
+        [
+            pk.SmoothnessCost(
+                cost_inputs=(
+                    robot.JointVar(jnp.arange(0, n_steps - 1)),
+                    robot.JointVar(jnp.arange(1, n_steps)),
+                ),
+                weights=w_smoothness,
             ),
-            weights=w_smoothness,
-        ),
-        pk.LimitVelCost(
-            cost_inputs=(
-                robot.JointVar(jnp.arange(0, n_steps - 1)),
-                robot.JointVar(jnp.arange(1, n_steps)),
+            pk.LimitVelCost(
+                cost_inputs=(
+                    robot.JointVar(jnp.arange(0, n_steps - 1)),
+                    robot.JointVar(jnp.arange(1, n_steps)),
+                ),
+                weights=w_limit_vel,
+                robot=robot,
+                dt=dt,
             ),
-            weights=w_limit_vel,
-            robot=robot,
-            dt=dt,
-        ),
-        pk.LimitCost(
-            cost_inputs=(robot.JointVar(jnp.arange(0, n_steps)),),
-            weights=w_limit,
-            robot=robot,
-        ),
-        pk.ManipulabilityCost(
-            cost_inputs=(robot.JointVar(jnp.arange(0, n_steps)),),
-            weights=0.001,
-            robot=robot,
-            target_link_indices=target_link_indices,
-        ),
-    ])
+            pk.LimitCost(
+                cost_inputs=(robot.JointVar(jnp.arange(0, n_steps)),),
+                weights=w_limit,
+                robot=robot,
+            ),
+            pk.ManipulabilityCost(
+                cost_inputs=(robot.JointVar(jnp.arange(0, n_steps)),),
+                weights=0.001,
+                robot=robot,
+                target_link_indices=target_link_indices,
+            ),
+        ]
+    )
 
     factors.extend(
         [
@@ -155,7 +157,9 @@ def run_mpc_step(
     else:
         init_traj_vals = jnp.repeat(initial_joints, n_steps, axis=0)
 
-    init_pose_vals = jaxlie.SE3(robot.forward_kinematics(init_traj_vals)[..., target_link_indices, :])
+    init_pose_vals = jaxlie.SE3(
+        robot.forward_kinematics(init_traj_vals)[..., target_link_indices, :]
+    )
 
     init_var = traj_var.with_value(init_traj_vals)
     init_pose_var = pose_var.with_value(init_pose_vals)

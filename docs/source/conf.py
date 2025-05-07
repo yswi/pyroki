@@ -24,7 +24,9 @@ project = "pyroki"  # Change project name
 copyright = "2025"  # Update copyright year/holder if needed
 author = "chungmin99"  # Update author name
 
-version: str = os.environ.get("PYROKI_VERSION_STR_OVERRIDE", pyroki.__version__) # Remove this
+version: str = os.environ.get(
+    "PYROKI_VERSION_STR_OVERRIDE", pyroki.__version__
+)  # Remove this
 
 # Formatting!
 #     0.1.30 => v0.1.30

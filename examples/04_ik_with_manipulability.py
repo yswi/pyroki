@@ -80,8 +80,8 @@ def solve_ik(
             weights=jnp.array([limit_weight] * robot.joint.count),
         ),
         pk.RestCost(
-            (joint_var,), 
-            rest_pose=rest_pose_for_cost, # Use the determined rest pose
+            (joint_var,),
+            rest_pose=rest_pose_for_cost,  # Use the determined rest pose
             weights=jnp.array([rest_weight] * robot.joint.actuated_count),
         ),
     ]
@@ -212,7 +212,10 @@ def run_ik_loop(
 
     while True:
         target_link_indices = jnp.array(
-            [robot.link.names.index(h.value) for h in gui_handles["target_link_name_dropdowns"]]
+            [
+                robot.link.names.index(h.value)
+                for h in gui_handles["target_link_name_dropdowns"]
+            ]
         )
         target_poses = jaxlie.SE3(
             jnp.stack(
@@ -247,7 +250,9 @@ def run_ik_loop(
         urdf_vis.update_cfg(joints)
 
         # Visualize current pose of target links
-        Ts_link_world_array = robot.forward_kinematics(joints) # FK now returns link poses array
+        Ts_link_world_array = robot.forward_kinematics(
+            joints
+        )  # FK now returns link poses array
         for i, frame_handle in enumerate(gui_handles["target_frames"]):
             # Index the numerical array to get the specific link's world pose array
             current_pose_array = Ts_link_world_array[target_link_indices[i]]
@@ -256,7 +261,7 @@ def run_ik_loop(
             frame_handle.position = onp.array(current_pose.translation().squeeze())
             frame_handle.wxyz = onp.array(current_pose.rotation().wxyz.squeeze())
 
-        # --- Original Logic for Manipulability Ellipsoid Visualization --- 
+        # --- Original Logic for Manipulability Ellipsoid Visualization ---
         show_manip = gui_handles["show_manipulability"].value
         if show_manip and len(target_link_indices) > 0:
             try:
@@ -264,7 +269,7 @@ def run_ik_loop(
                 first_target_link_idx = target_link_indices[0]
                 jacobian = jax.jacfwd(
                     # Function gets pose array, extracts translation for the target link
-                    lambda q: robot.forward_kinematics(q)[first_target_link_idx, 4:] 
+                    lambda q: robot.forward_kinematics(q)[first_target_link_idx, 4:]
                 )(joints)
                 # jacobian shape: (3, num_actuated_joints)
 
@@ -292,8 +297,8 @@ def run_ik_loop(
                 # Use add_mesh_simple (or similar from original code) for visualization
                 # Ensure correct handle management
                 if manip_ellipsoid_handle is not None:
-                    manip_ellipsoid_handle.remove() # Remove previous if exists
-                
+                    manip_ellipsoid_handle.remove()  # Remove previous if exists
+
                 manip_ellipsoid_handle = server.scene.add_mesh_simple(
                     "/manipulability_ellipse",
                     vertices=onp.array(ellipsoid_mesh.vertices),
@@ -310,7 +315,7 @@ def run_ik_loop(
         elif not show_manip and manip_ellipsoid_handle is not None:
             manip_ellipsoid_handle.remove()
             manip_ellipsoid_handle = None
-        # --- End Original Logic --- 
+        # --- End Original Logic ---
 
 
 def main(

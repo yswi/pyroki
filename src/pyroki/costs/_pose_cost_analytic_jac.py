@@ -56,9 +56,9 @@ def pose_cost_analytic_jac(
     pos_weight: jax.Array | float,
     ori_weight: jax.Array | float,
 ) -> jaxls.Cost:
-    assert (
-        target_link_index.shape == ()
-    ), "Analytical jacobian currently only supports single target link."
+    assert target_link_index.shape == (), (
+        "Analytical jacobian currently only supports single target link."
+    )
 
     base_link_mask = robot.links.parent_joint_indices == -1
     parent_joint_indices = jnp.where(
@@ -126,7 +126,9 @@ def pose_cost_analytic_jac(
         #
         # this indexing/slicing here works for Panda but I'm not sure how to
         # make this generalize
-        jac = jac[:, robot.joints.actuated_indices][:, : robot.joints.num_actuated_joints]
+        jac = jac[:, robot.joints.actuated_indices][
+            :, : robot.joints.num_actuated_joints
+        ]
 
         # Apply weights
         weights = jnp.array([pos_weight] * 3 + [ori_weight] * 3)

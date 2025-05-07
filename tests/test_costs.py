@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 import jaxlie
 import jaxls
@@ -10,6 +9,7 @@ from pyroki._costs import (
 )
 
 # Ideally we can use this to test mimic joints, and that we're correctly tracking the link poses, etc.
+
 
 @pytest.fixture
 def simple_robot() -> pk.Robot:

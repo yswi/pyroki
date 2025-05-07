@@ -253,9 +253,9 @@ class RobotCollision:
         """
         # Check if the link names match - this should be true if both Robot
         # and RobotCollision were created from the same URDF parser results.
-        assert (
-            self.link_names == robot.link.names
-        ), "Link name mismatch between RobotCollision and Robot kinematics."
+        assert self.link_names == robot.link.names, (
+            "Link name mismatch between RobotCollision and Robot kinematics."
+        )
 
         Ts_link_world_wxyz_xyz = robot.forward_kinematics(cfg)
         Ts_link_world = jaxlie.SE3(Ts_link_world_wxyz_xyz)
@@ -298,22 +298,22 @@ class RobotCollision:
         # Shape: (n_segments, *batch, num_links)
         spheres_prev = coll_prev_world.decompose_to_spheres(n_segments)
         spheres_next = coll_next_world.decompose_to_spheres(n_segments)
-        assert (
-            spheres_prev.get_batch_axes() == spheres_next.get_batch_axes()
-        ), "Sphere batch axes mismatch after decomposition."
+        assert spheres_prev.get_batch_axes() == spheres_next.get_batch_axes(), (
+            "Sphere batch axes mismatch after decomposition."
+        )
         expected_sphere_batch_axes = (
             (n_segments,) + cfg_prev.shape[:-1] + (self.num_links,)
         )
-        assert (
-            spheres_prev.get_batch_axes() == expected_sphere_batch_axes
-        ), f"Unexpected sphere batch axes: {spheres_prev.get_batch_axes()} vs {expected_sphere_batch_axes}"
+        assert spheres_prev.get_batch_axes() == expected_sphere_batch_axes, (
+            f"Unexpected sphere batch axes: {spheres_prev.get_batch_axes()} vs {expected_sphere_batch_axes}"
+        )
 
         # 3. Create swept capsules by connecting corresponding sphere pairs
         # Shape: (n_segments, *batch, num_links)
         swept_capsules = Capsule.from_sphere_pairs(spheres_prev, spheres_next)
-        assert (
-            swept_capsules.get_batch_axes() == expected_sphere_batch_axes
-        ), "Swept capsule batch axes mismatch."
+        assert swept_capsules.get_batch_axes() == expected_sphere_batch_axes, (
+            "Swept capsule batch axes mismatch."
+        )
 
         # The result contains capsules for each segment of each link.
         return swept_capsules

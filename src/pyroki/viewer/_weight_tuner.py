@@ -53,9 +53,9 @@ class WeightTuner[T: Mapping[str, object]]:  # TypedDict is a Mapping[str, objec
             default_step: Step size for all sliders. `step` overrides this.
         """
         leaves = jax.tree.leaves(default)
-        assert all(
-            isinstance(leaf, (int, float)) for leaf in leaves
-        ), "All default parameters must be ints or floats."
+        assert all(isinstance(leaf, (int, float)) for leaf in leaves), (
+            "All default parameters must be ints or floats."
+        )
         assert isinstance(default, dict)
 
         self._server = server

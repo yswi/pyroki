@@ -92,9 +92,10 @@ def collide(geom1: CollGeom, geom2: CollGeom) -> Float[Array, "*batch"]:
 
 # Define the doubly-vmapped function directly at the module level
 _pairwise_collide_vmapped = jax.vmap(
-    jax.vmap(collide, in_axes=(None, -2)), # Inner map over geom2's collection dim (M)
-    in_axes=(-2, None) # Outer map over geom1's collection dim (N)
+    jax.vmap(collide, in_axes=(None, -2)),  # Inner map over geom2's collection dim (M)
+    in_axes=(-2, None),  # Outer map over geom1's collection dim (N)
 )
+
 
 # Consider adding @jdc.jit here if needed, though vmap often handles jit well.
 def pairwise_collide(geom1: CollGeom, geom2: CollGeom) -> Float[Array, "*batch N M"]:
@@ -119,8 +120,12 @@ def pairwise_collide(geom1: CollGeom, geom2: CollGeom) -> Float[Array, "*batch N
     # Input checks
     axes1 = geom1.get_batch_axes()
     axes2 = geom2.get_batch_axes()
-    assert len(axes1) >= 1, f"geom1 must have at least one batch dimension to map over, got shape {axes1}"
-    assert len(axes2) >= 1, f"geom2 must have at least one batch dimension to map over, got shape {axes2}"
+    assert len(axes1) >= 1, (
+        f"geom1 must have at least one batch dimension to map over, got shape {axes1}"
+    )
+    assert len(axes2) >= 1, (
+        f"geom2 must have at least one batch dimension to map over, got shape {axes2}"
+    )
 
     # Determine expected output shape
     batch1_shape = axes1[:-1]
@@ -168,13 +173,13 @@ def colldist_from_sdf(
         Transformed collision distance field values (<= 0).
     """
     _dist = -_dist  # Convert to: positive = penetration
-    _dist = jnp.maximum(_dist, -activation_dist) # Clamp penetration at activation_dist
+    _dist = jnp.maximum(_dist, -activation_dist)  # Clamp penetration at activation_dist
     # Apply quadratic smoothing near the activation boundary
     _dist = jnp.where(
         _dist > 0,
         _dist + 0.5 * activation_dist,
         0.5 / activation_dist * (_dist + activation_dist) ** 2,
     )
-    _dist = jnp.maximum(_dist, 0.0) # Ensure result is non-negative (penetration value)
-    _dist = -_dist # Negate back to signed distance convention (<= 0)
+    _dist = jnp.maximum(_dist, 0.0)  # Ensure result is non-negative (penetration value)
+    _dist = -_dist  # Negate back to signed distance convention (<= 0)
     return _dist

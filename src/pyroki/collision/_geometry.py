@@ -31,9 +31,9 @@ class CollGeom(abc.ABC):
         """Get batch axes of the geometry."""
         batch_axes_from_pose = self.pose.get_batch_axes()
         size_batch_axes = self.size.shape[:-1]
-        assert (
-            size_batch_axes == batch_axes_from_pose
-        ), f"Size batch axes {size_batch_axes} do not match pose batch axes {batch_axes_from_pose}."
+        assert size_batch_axes == batch_axes_from_pose, (
+            f"Size batch axes {size_batch_axes} do not match pose batch axes {batch_axes_from_pose}."
+        )
         return batch_axes_from_pose
 
     def broadcast_to(self, *shape: int) -> Self:
@@ -349,7 +349,6 @@ class Capsule(CollGeom):
         return capsule
 
 
-
 @jdc.pytree_dataclass
 class Heightmap(CollGeom):
     """Heightmap geometry defined by a grid of height values.
@@ -430,9 +429,9 @@ class Heightmap(CollGeom):
         x_res = max(1, int(jnp.ceil((x_max - x_min) / resolution)))
         y_res = max(1, int(jnp.ceil((y_max - y_min) / resolution)))
 
-        assert (x_bins is not None) == (
-            y_bins is not None
-        ), "x_bins and y_bins must both be provided or not provided"
+        assert (x_bins is not None) == (y_bins is not None), (
+            "x_bins and y_bins must both be provided or not provided"
+        )
         if x_bins is not None:
             assert x_bins is not None and y_bins is not None
             x_res = x_bins

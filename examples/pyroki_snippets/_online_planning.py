@@ -7,7 +7,6 @@ import jaxlie
 import jaxls
 import numpy as onp
 import pyroki as pk
-from jax.typing import ArrayLike
 
 
 def solve_online_planning(

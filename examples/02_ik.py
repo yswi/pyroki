@@ -188,7 +188,10 @@ def run_ik_loop(
 
     while True:
         target_link_indices = jnp.array(
-            [robot.link.names.index(h.value) for h in gui_handles["target_link_name_dropdowns"]]
+            [
+                robot.link.names.index(h.value)
+                for h in gui_handles["target_link_name_dropdowns"]
+            ]
         )
         target_poses = jaxlie.SE3(
             jnp.stack(

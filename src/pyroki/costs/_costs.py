@@ -83,9 +83,7 @@ def limit_velocity_cost(
 ) -> Array:
     """Computes the residual penalizing joint velocity limit violations."""
     joint_vel = (vals[joint_var] - vals[prev_joint_var]) / dt
-    residual = jnp.maximum(
-        0.0, jnp.abs(joint_vel) - robot.joints.velocity_limits
-    )
+    residual = jnp.maximum(0.0, jnp.abs(joint_vel) - robot.joints.velocity_limits)
     return (residual * weight).flatten()
 
 
