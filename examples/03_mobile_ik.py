@@ -9,7 +9,7 @@ from robot_descriptions.loaders.yourdfpy import load_robot_description
 import numpy as np
 
 import pyroki as pk
-from pyroki.viewer import BatchedURDF
+from viser.extras import ViserUrdf
 import pyroki_snippets as pks
 
 
@@ -28,7 +28,7 @@ def main():
     server = viser.ViserServer()
     server.scene.add_grid("/ground", width=2, height=2)
     base_frame = server.scene.add_frame("/base", show_axes=False)
-    urdf_vis = BatchedURDF(server, urdf, root_node_name="/base")
+    urdf_vis = ViserUrdf(server, urdf, root_node_name="/base")
 
     # Create interactive controller with initial position.
     ik_target = server.scene.add_transform_controls(

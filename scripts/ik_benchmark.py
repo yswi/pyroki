@@ -1,3 +1,11 @@
+"""Modified version of cuRobo's IK benchmark script:
+
+    https://github.com/NVlabs/curobo/blob/0a50de1ba72db304195d59d9d0b1ed269696047f/benchmark/ik_benchmark.py
+
+Compares a PyRoki-based IK solver against cuRobo's IK solver.
+"""
+
+
 # pyright: reportMissingImports=false
 # pyright: reportPossiblyUnboundVariable=false
 # pyright: reportMissingModuleSource=false
@@ -84,7 +92,7 @@ def roberts_sequence(num_points, dim, root):
     return x
 
 
-class PyrokiLmBeamHelper:
+class PyrokiIkBeamHelper:
     def __init__(self):
         # Get the Panda robot. We fix the prismatic (gripper) joints. This is to
         # match cuRobo, it makes a very small runtime difference.
@@ -198,9 +206,9 @@ class PyrokiLmBeamHelper:
 
 
 # Batched helpers for IK and FK.
-lm_beam = PyrokiLmBeamHelper()
-batched_ik = jax.jit(jax.vmap(lm_beam.solve_ik))
-batched_fk = jax.jit(jax.vmap(lm_beam.forward_kinematics))
+ik_beam = PyrokiIkBeamHelper()
+batched_ik = jax.jit(jax.vmap(ik_beam.solve_ik))
+batched_fk = jax.jit(jax.vmap(ik_beam.forward_kinematics))
 
 
 def evaluate_pyroki_ik(q_sample: torch.Tensor):
