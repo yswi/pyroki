@@ -14,7 +14,7 @@ Core features include:
 - Integration with a [Levenberg-Marquardt Solver](https://github.com/brentyi/jaxls).
 - Cross-platform support (CPU, GPU, TPU).
 
-Please refer to the [documentation]() for more details, features, and usage examples.
+Please refer to the [documentation](https://chungmin99.github.io/pyroki/) for more details, features, and usage examples.
 
 
 ---
@@ -24,7 +24,9 @@ Please refer to the [documentation]() for more details, features, and usage exam
 You can install `pyroki` with `pip`, with Python 3.12+:
 
 ```
-pip install "git+https://github.com/chungmin99/pyroki.git[examples]"
+git clone https://github.com/chungmin99/pyroki.git
+cd pyroki
+pip install -e .
 ```
 
 
