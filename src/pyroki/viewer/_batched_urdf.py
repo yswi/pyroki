@@ -119,9 +119,9 @@ class BatchedURDF:
         """
         base_transforms_jnp = jnp.array(base_transforms)
         base_transforms_jnp = jnp.atleast_2d(base_transforms_jnp)
-        assert (
-            base_transforms_jnp.shape[0] == self._num_robots
-        ), f"Expected first dimension of base_transforms to be {self._num_robots}, got {base_transforms_jnp.shape[0]}"
+        assert base_transforms_jnp.shape[0] == self._num_robots, (
+            f"Expected first dimension of base_transforms to be {self._num_robots}, got {base_transforms_jnp.shape[0]}"
+        )
 
         self._base_transforms = jaxlie.SE3(base_transforms_jnp)
 
@@ -138,9 +138,9 @@ class BatchedURDF:
         """
         cfg_jax = jnp.array(cfg)  # in case cfg is an onp.ndarray.
         cfg_jax = jnp.atleast_2d(cfg_jax)
-        assert (
-            cfg_jax.shape[0] == self._num_robots
-        ), f"Expected first dimension of cfg to be {self._num_robots}, got {cfg_jax.shape[0]}"
+        assert cfg_jax.shape[0] == self._num_robots, (
+            f"Expected first dimension of cfg to be {self._num_robots}, got {cfg_jax.shape[0]}"
+        )
 
         # Store the latest configuration
         self._last_cfg = cfg_jax
