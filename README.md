@@ -8,9 +8,9 @@
 Core features include:
 - Differentiable robot forward kinematics model from a URDF.
 - Automatic generation of robot collision primitives (e.g., capsules).
-- Differentiable collision bodies with numpy broadcasting logic. 
-- Common cost factors (e.g., end effector pose, self/world-collision, manipulability).
-- Arbitrary costs, getting Jacobians either calculated through autodiff or defined manually.
+- Differentiable collision bodies with numpy broadcasting logic.
+- Common cost implementations (e.g., end effector pose, self/world-collision, manipulability).
+- Arbitrary costs, autodiff or analytical Jacobians.
 - Integration with a [Levenberg-Marquardt Solver](https://github.com/brentyi/jaxls).
 - Cross-platform support (CPU, GPU, TPU).
 
