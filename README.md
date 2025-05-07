@@ -1,7 +1,7 @@
 # `PyRoki`: Python Robot Kinematics Library
 
 **[Project page](https://pyroki-toolkit.github.io/) &bull;
-[arXiv](TODO)**
+[arXiv](https://arxiv.org/abs/2505.03728)**
 
 `PyRoki` is a modular, extensible, and cross-platform toolkit for kinematic optimization, all in Python.
 
