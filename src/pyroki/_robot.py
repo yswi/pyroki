@@ -45,8 +45,7 @@ class Robot:
         if default_joint_cfg is None:
             default_joint_cfg = (joints.lower_limits + joints.upper_limits) / 2
         else:
-            default_joint_cfg = default_joint_cfg
-        default_joint_cfg = jnp.array(default_joint_cfg)
+            default_joint_cfg = jnp.array(default_joint_cfg)
         assert default_joint_cfg.shape == (joints.num_actuated_joints,)
 
         # Variable class for the robot configuration.
