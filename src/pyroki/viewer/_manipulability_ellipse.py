@@ -77,7 +77,7 @@ class ManipulabilityEllipse:
 
         # Viser version compatibility.
         if hasattr(self._mesh_handle, "cast_shadow"):
-            self._mesh_handle.cast_shadow = (
+            self._mesh_handle.cast_shadow = (  # type: ignore[attr-defined]
                 False  # Ellipsoids usually don't need shadows
             )
 

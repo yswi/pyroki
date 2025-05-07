@@ -1,3 +1,5 @@
+from typing import Any
+
 import jax.numpy as jnp
 import jaxlie
 import numpy as onp
@@ -8,9 +10,9 @@ from jax.typing import ArrayLike
 from pyroki._robot import Robot
 
 try:
-    from viser.extras import BatchedGlbHandle
+    from viser.extras import BatchedGlbHandle  # type: ignore[attr-defined]
 except ImportError:
-    BatchedGlbHandle = viser.GlbHandle
+    BatchedGlbHandle = Any
 
 
 class BatchedURDF:
@@ -83,7 +85,7 @@ class BatchedURDF:
 
             if self._num_robots > 1:
                 self._meshes[link_name].append(
-                    self._target.scene.add_batched_meshes_trimesh(
+                    self._target.scene.add_batched_meshes_trimesh(  # type: ignore[attr-defined]
                         f"{self._root_node_name}/{mesh_name}",
                         mesh,
                         batched_positions=dummy_position,
