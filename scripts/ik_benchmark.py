@@ -1,3 +1,7 @@
+# pyright: reportMissingImports=false
+# pyright: reportPossiblyUnboundVariable=false
+# pyright: reportMissingModuleSource=false
+
 #
 # Copyright (c) 2023 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 #

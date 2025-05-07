@@ -94,12 +94,12 @@ def main():
 
         # Update the planned trajectory visualization.
         if hasattr(target_frame_handle, "batched_positions"):
-            target_frame_handle.batched_positions = np.array(sol_pos)
-            target_frame_handle.batched_wxyzs = np.array(sol_wxyz)
+            target_frame_handle.batched_positions = np.array(sol_pos)  # type: ignore[attr-defined]
+            target_frame_handle.batched_wxyzs = np.array(sol_wxyz)  # type: ignore[attr-defined]
         else:
             # This is an older version of Viser.
-            target_frame_handle.positions_batched = np.array(sol_pos)
-            target_frame_handle.wxyzs_batched = np.array(sol_wxyz)
+            target_frame_handle.positions_batched = np.array(sol_pos)  # type: ignore[attr-defined]
+            target_frame_handle.wxyzs_batched = np.array(sol_wxyz)  # type: ignore[attr-defined]
 
 
 if __name__ == "__main__":

@@ -35,6 +35,7 @@ dev = [
     "scikit-sparse",
     "ruff",
     "pytest",
+    "m2r2",
 ]
 
 [tool.ruff.lint]

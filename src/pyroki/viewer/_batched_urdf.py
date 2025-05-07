@@ -7,6 +7,11 @@ import yourdfpy
 from jax.typing import ArrayLike
 from pyroki._robot import Robot
 
+try:
+    from viser.extras import BatchedGlbHandle
+except ImportError:
+    BatchedGlbHandle = viser.GlbHandle
+
 
 class BatchedURDF:
     """
@@ -51,7 +56,7 @@ class BatchedURDF:
         dummy_position = dummy_transform.translation()
         dummy_wxyz = dummy_transform.rotation().wxyz
 
-        self._meshes: dict[str, list[viser.BatchedGlbHandle | viser.GlbHandle]] = {}
+        self._meshes: dict[str, list[BatchedGlbHandle | viser.GlbHandle]] = {}
         self._link_to_meshes: dict[str, onp.ndarray] = {}
 
         # Check if add_batched_meshes_trimesh is available.
@@ -114,9 +119,9 @@ class BatchedURDF:
         """
         base_transforms_jnp = jnp.array(base_transforms)
         base_transforms_jnp = jnp.atleast_2d(base_transforms_jnp)
-        assert base_transforms_jnp.shape[0] == self._num_robots, (
-            f"Expected first dimension of base_transforms to be {self._num_robots}, got {base_transforms_jnp.shape[0]}"
-        )
+        assert (
+            base_transforms_jnp.shape[0] == self._num_robots
+        ), f"Expected first dimension of base_transforms to be {self._num_robots}, got {base_transforms_jnp.shape[0]}"
 
         self._base_transforms = jaxlie.SE3(base_transforms_jnp)
 
@@ -133,9 +138,9 @@ class BatchedURDF:
         """
         cfg_jax = jnp.array(cfg)  # in case cfg is an onp.ndarray.
         cfg_jax = jnp.atleast_2d(cfg_jax)
-        assert cfg_jax.shape[0] == self._num_robots, (
-            f"Expected first dimension of cfg to be {self._num_robots}, got {cfg_jax.shape[0]}"
-        )
+        assert (
+            cfg_jax.shape[0] == self._num_robots
+        ), f"Expected first dimension of cfg to be {self._num_robots}, got {cfg_jax.shape[0]}"
 
         # Store the latest configuration
         self._last_cfg = cfg_jax
@@ -165,6 +170,6 @@ class BatchedURDF:
                     mesh.position = position[0]
                     mesh.wxyz = wxyz[0]
                 else:
-                    assert isinstance(mesh, viser.BatchedGlbHandle)
+                    assert isinstance(mesh, BatchedGlbHandle)
                     mesh.batched_positions = position
                     mesh.batched_wxyzs = wxyz
