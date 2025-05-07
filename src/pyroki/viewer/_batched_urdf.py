@@ -55,7 +55,10 @@ class BatchedURDF:
         self._link_to_meshes: dict[str, onp.ndarray] = {}
 
         # Check if add_batched_meshes_trimesh is available.
-        if not hasattr(self._target.scene, "add_batched_meshes_trimesh") and self._num_robots > 1:
+        if (
+            not hasattr(self._target.scene, "add_batched_meshes_trimesh")
+            and self._num_robots > 1
+        ):
             raise NotImplementedError(
                 "num_robots > 1, but viser doesn't support instancing "
                 "(add_batched_meshes_trimesh is not available)."
