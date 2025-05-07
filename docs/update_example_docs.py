@@ -37,7 +37,7 @@ class ExampleMetadata:
         description = description.strip()
         description += "\n"
         description += "\n"
-        description += "All descriptions can be run by cloning the PyRoki repository, which includes the `pyroki_snippets` implementation details."
+        description += "All examples can be run by first cloning the PyRoki repository, which includes the `pyroki_snippets` implementation details."
 
         return ExampleMetadata(
             index=index,
