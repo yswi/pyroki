@@ -37,7 +37,7 @@ def solve_ik(
     """
     assert target_position.shape == (3,) and target_wxyz.shape == (4,)
     target_link_index = robot.links.names.index(target_link_name)
-
+    
     # Use provided initial joint angles or default to zeros
     if initial_joint_angles is not None:
         initial_joint_angles = jnp.array(initial_joint_angles)
@@ -47,7 +47,7 @@ def solve_ik(
         jnp.array(target_link_index),
         jnp.array(target_wxyz),
         jnp.array(target_position),
-        
+        initial_joint_angles,
         rest_weight,
     )
     assert cfg.shape == (robot.joints.num_actuated_joints,)
